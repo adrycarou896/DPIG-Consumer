@@ -1,6 +1,8 @@
 package prueba;
 import java.io.Serializable;
 
+import org.json.JSONObject;
+
 public class Person implements Serializable {
 	
 	/**
@@ -22,6 +24,12 @@ public class Person implements Serializable {
 
 	public void setIdentificador(String identificador) {
 		this.identificador = identificador;
+	}
+	
+	public JSONObject getJson() {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("identificador", this.identificador);
+		return jsonObject;
 	}
 
 }

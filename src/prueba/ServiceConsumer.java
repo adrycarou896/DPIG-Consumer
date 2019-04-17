@@ -1,16 +1,14 @@
 package prueba;
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ServiceConsumer {
@@ -21,11 +19,13 @@ public class ServiceConsumer {
 				consumir();
 			} catch (IOException e) {
 				e.printStackTrace();
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
 		
 	}
 	
-	public static void consumir() throws IOException
+	public static void consumir() throws IOException, ParseException
     {
 		URL url = null;
 	    url = new URL("http://localhost:8090/servicesREST/JR/validateUser");
@@ -40,10 +40,22 @@ public class ServiceConsumer {
 	    DataOutputStream output = null;
 	    DataInputStream input = null;
 	    output = new DataOutputStream(urlConn.getOutputStream());
-
-	                /*Construct the POST data.*/
-	    JSONObject jsonObject = new JSONObject();
-	    jsonObject.put("person", new Person("id1"));
+	    
+	    Camera camera = new Camera("c1",new ArrayList<Camera>());
+	    Person person = new Person("id1");
+	    
+	    Date fecha = new Date();
+	    
+	    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+	    String day = format.format(fecha);
+	    
+	    format = new SimpleDateFormat("HH:mm:ss");
+	    String hour = format.format(fecha);
+	    
+	    Match match = new Match(camera, person, day, hour);
+	    
+	    JSONObject jsonObject = match.getJson();
+	    
 	    String content = jsonObject.toString();
 
 	    /* Send the request data.*/
@@ -56,31 +68,8 @@ public class ServiceConsumer {
 	    input = new DataInputStream (urlConn.getInputStream());
 	    while (null != ((response = input.readLine()))) {
 	        System.out.println(response);
-	        input.close ();
 	    }
+	    input.close ();
     }
 	
-	/**
-	 * Transforma el InputStream en un String
-	 * @return StringBuilder
-	 * */
-	 private static StringBuilder inputStreamToString(InputStream is)
-	 {  
-		  String line = "";
-		  StringBuilder stringBuilder = new StringBuilder();
-		  BufferedReader rd = new BufferedReader( new InputStreamReader(is) );  
-		  try
-		  {
-		   while( (line = rd.readLine()) != null )
-		   {
-		    stringBuilder.append(line);
-		   }
-		  }
-		  catch( IOException e)
-		  {
-		   e.printStackTrace(); 
-		  }
-	
-		  return stringBuilder;
-	 }
 }
