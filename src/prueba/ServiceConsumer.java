@@ -35,6 +35,7 @@ public class ServiceConsumer {
 	    urlConn.setDoOutput (true);
 	    urlConn.setRequestMethod("POST");
 	    urlConn.setRequestProperty("Content-Type", "application/json");
+	    urlConn.setRequestProperty("Accept", "application/json");
 	    urlConn.connect();
 
 	    DataOutputStream output = null;
@@ -44,15 +45,17 @@ public class ServiceConsumer {
 	    Camera camera = new Camera("c1",new ArrayList<Camera>());
 	    Person person = new Person("id1");
 	    
-	    Date fecha = new Date();
+	    Date date = new Date();
 	    
+	    /*
 	    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 	    String day = format.format(fecha);
 	    
 	    format = new SimpleDateFormat("HH:mm:ss");
 	    String hour = format.format(fecha);
+	    */
 	    
-	    Match match = new Match(camera, person, day, hour);
+	    Match match = new Match(camera, person, date);
 	    
 	    JSONObject jsonObject = match.getJson();
 	    
